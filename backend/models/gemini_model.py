@@ -1,23 +1,18 @@
-# Test for Gemini Model
-#from google import genai
-import google.generativeai as genai
+from google import genai
 from dotenv import load_dotenv
 import os
 
 # Load environment
 load_dotenv()
 
-# Configure Gemini 
+# Configure Gemini
 api_key = os.getenv("GOOGLE_API_KEY")
 if not api_key:
     raise ValueError(
         "Missing API key. Set GOOGLE_API_KEY"
     )
 
-genai.configure(api_key=api_key)
-
-# Load Gemini model
-model = genai.GenerativeModel("gemini-2.5-flash")
+client = genai.Client(api_key=api_key)
 
 # Load prompt from file
 def load_prompt(prompt_name: str) -> str:
@@ -69,5 +64,8 @@ Candidate just said:
 Respond as the interviewer.
 """
 
-    response = model.generate_content(full_prompt)
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=full_prompt,
+    )
     return response.text.strip()

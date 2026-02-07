@@ -1,0 +1,6 @@
+streamlit
+SpeechRecognition 
+pydub
+pdfplumber
+google-genai
+python-dotenv
