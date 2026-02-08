@@ -1,6 +1,11 @@
-streamlit
+streamlit[pdf]
 SpeechRecognition 
 pydub
 pdfplumber
 google-genai
 python-dotenv
+torch
+soundfile
+librosa
+transformers
+elevenlabs
