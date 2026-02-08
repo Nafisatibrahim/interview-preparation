@@ -306,30 +306,46 @@ if st.session_state.page == "home":
     #  improvements, and a "Start Practicing" button to go to interview page
     # ─────────────────────────────────────────────────────────────────────────
 
-    # Navigation button at the TOP of the page (so users don't have to scroll)
+    # Bold, prominent "Start Practicing Now" button at the TOP
+    st.markdown("""
+    <style>
+    div[data-testid="stButton"] > button[kind="secondary"][key*="goto_interview"],
+    .bold-start-btn > div > button {
+        background: linear-gradient(135deg, #4F46E5 0%, #06B6D4 100%) !important;
+        color: white !important;
+        font-size: 1.2rem !important;
+        font-weight: 700 !important;
+        padding: 0.8rem 2rem !important;
+        border: none !important;
+        border-radius: 12px !important;
+        letter-spacing: 0.02em !important;
+        box-shadow: 0 4px 14px rgba(79,70,229,0.35) !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
     col_top1, col_top2, col_top3 = st.columns([1, 2, 1])
     with col_top2:
-        if st.button("🚀  Start Practicing Now", use_container_width=True, key="goto_interview_top"):
+        if st.button("Start Practicing Now", use_container_width=True, key="goto_interview_top", type="primary"):
             st.session_state.page = "interview"
             st.rerun()
 
     # Render the full home page HTML (hero, features, video, team, etc.)
-    # Using components.html for reliable rendering of complex HTML/CSS
     components.html(
         f"""<html><head>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-        </head><body style="margin:0;padding:0;font-family:'Inter',sans-serif;">
+        </head><body style="margin:0;padding:0;font-family:'Inter',sans-serif;overflow:hidden;">
         {HOME_PAGE_HTML}
         </body></html>""",
-        height=1800,
-        scrolling=True
+        height=3000,
+        scrolling=False
     )
 
-    # Navigation button at the BOTTOM too
+    # Bold "Start Practicing Now" button at the BOTTOM too
     st.markdown("")
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        if st.button("🚀  Start Practicing Now", use_container_width=True, key="goto_interview"):
+        if st.button("Start Practicing Now", use_container_width=True, key="goto_interview", type="primary"):
             st.session_state.page = "interview"
             st.rerun()
 
@@ -476,11 +492,12 @@ elif st.session_state.page == "interview":
     if st.sidebar.button("🛑  Stop & Get Feedback", use_container_width=True):
         if st.session_state.conversation:
             try:
-                feedback_text = interview_feedback(
-                    st.session_state.job_description,
-                    st.session_state.resume_text,
-                    st.session_state.conversation,
-                )
+                with st.spinner("Generating your feedback report..."):
+                    feedback_text = interview_feedback(
+                        st.session_state.job_description,
+                        st.session_state.resume_text,
+                        st.session_state.conversation,
+                    )
                 st.session_state.feedback = feedback_text
                 st.session_state.started = False
                 st.session_state.last_tts_audio = None
@@ -675,7 +692,7 @@ elif st.session_state.page == "interview":
                 )
                 st.rerun()
         with btn_col2:
-            if st.button("📋 Job Desc", use_container_width=True):
+            if st.button("📋 JD", use_container_width=True):
                 st.session_state.show_material = (
                     "jd" if st.session_state.show_material != "jd" else None
                 )

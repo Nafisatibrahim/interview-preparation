@@ -51,13 +51,7 @@ if resume_pdf:
     resume_text = extract_text_from_pdf(resume_pdf)
     st.session_state.resume_text = resume_text
     st.success("Resume uploaded and read successfully.")
-    # streamlit-pdf requires component asset registration; use download instead.
-    st.download_button(
-        "Download uploaded resume",
-        data=resume_pdf.getvalue(),
-        file_name=resume_pdf.name or "resume.pdf",
-        mime="application/pdf",
-    )
+    st.pdf(resume_pdf)
 # Start interview
 if st.sidebar.button("Start Interview"):
     if not job_description_text or not resume_text:
@@ -101,13 +95,10 @@ if st.session_state.started and not flag:
     processor, model = load_whisper()
 
 
-    format = st.selectbox(
-        "Do you want to answer with transcription or type your answers?",
-        options=["Transcribe", "Type"],
-    )
-    transcription = ""
+    format = st.selectbox("Do you want to answer with transcription or type your answers?", options =
+                    ["Transcribe", "Type"])
 
-    if format == "Type":
+    if format=="Type":
         user_answer = st.text_input("Your answer")
     else:
         audio_file = st.audio_input("Speak your answer")

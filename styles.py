@@ -31,6 +31,23 @@ html, body, [class*="st-"] {
 footer {visibility: hidden;}
 header {visibility: hidden;}
 
+[data-testid="stAppRunningIndicator"] {
+    display: none !important;
+}
+
+div[data-testid="stStatusWidget"] {
+    display: none !important;
+}
+
+[data-testid="stOverlay"] {
+    display: none !important;
+}
+
+.stApp > [data-testid="stAppViewBlockContainer"],
+.stApp [data-testid="stVerticalBlock"] {
+    opacity: 1 !important;
+}
+
 .stApp {
     background: var(--bg-main);
 }
@@ -79,24 +96,38 @@ section[data-testid="stSidebar"] .stFileUploader label {
 
 section[data-testid="stSidebar"] .stTextInput input,
 section[data-testid="stSidebar"] .stTextArea textarea {
-    background: rgba(255,255,255,0.08) !important;
-    border: 1px solid rgba(255,255,255,0.12) !important;
+    background: #FFFFFF !important;
+    border: 1px solid #CBD5E1 !important;
     border-radius: 8px !important;
-    color: #F8FAFC !important;
+    color: #1E293B !important;
     font-family: 'Inter', sans-serif !important;
+}
+
+section[data-testid="stSidebar"] .stTextInput input::placeholder,
+section[data-testid="stSidebar"] .stTextArea textarea::placeholder {
+    color: #94A3B8 !important;
 }
 
 section[data-testid="stSidebar"] .stTextInput input:focus,
 section[data-testid="stSidebar"] .stTextArea textarea:focus {
-    border-color: var(--primary-light) !important;
-    box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.3) !important;
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2) !important;
+    color: #1E293B !important;
 }
 
 section[data-testid="stSidebar"] .stFileUploader {
-    background: rgba(255,255,255,0.05) !important;
-    border: 2px dashed rgba(255,255,255,0.15) !important;
+    background: rgba(255,255,255,0.9) !important;
+    border: 2px dashed #CBD5E1 !important;
     border-radius: 10px !important;
     padding: 1rem !important;
+}
+
+section[data-testid="stSidebar"] .stFileUploader * {
+    color: #475569 !important;
+}
+
+section[data-testid="stSidebar"] .stFileUploader small {
+    color: #94A3B8 !important;
 }
 
 section[data-testid="stSidebar"] h2, 
@@ -482,7 +513,7 @@ HOME_PAGE_HTML = """
             margin: 0 auto 1.5rem auto;
             line-height: 1.7;
             font-weight: 400;
-        ">Your AI-powered mock interview coach. Upload your resume, paste the job description, and practice with a realistic interviewer - powered by Google Gemini.</p>
+        ">Your AI-powered mock interview coach. Upload your resume, paste the job description, and practice with a realistic interviewer - powered by <a href="https://ai.google.dev/" target="_blank" rel="noopener noreferrer" style="color: #4F46E5; text-decoration: none; font-weight: 500;">Google Gemini</a>, <a href="https://github.com/openai/whisper" target="_blank" rel="noopener noreferrer" style="color: #4F46E5; text-decoration: none; font-weight: 500;">Whisper (OpenAI)</a>, and <a href="https://elevenlabs.io/" target="_blank" rel="noopener noreferrer" style="color: #4F46E5; text-decoration: none; font-weight: 500;">ElevenLabs</a>.</p>
         <div style="
             display: flex;
             justify-content: center;
@@ -842,6 +873,80 @@ HOME_PAGE_HTML = """
         </div>
     </div>
 
+    <!-- ═══════════ HACKATHON BADGE ═══════════ -->
+    <div style="
+        background: linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(251,191,36,0.08) 100%);
+        border: 1px solid rgba(245,158,11,0.2);
+        border-radius: 14px;
+        padding: 1.2rem 2rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    ">
+        <p style="font-size: 1.1rem; margin: 0 0 0.3rem 0; font-weight: 700; color: #92400E;">CXC 2026 - AI Hackathon</p>
+        <p style="font-size: 0.88rem; margin: 0; color: #B45309; font-weight: 500;">Powered by Tangerine</p>
+    </div>
+
+    <!-- ═══════════ BUILT WITH ═══════════ -->
+    <div style="margin-bottom: 1.5rem;">
+        <h2 style="
+            font-weight: 800;
+            font-size: 1.3rem;
+            color: #1E293B;
+            margin: 0 0 1rem 0;
+            letter-spacing: -0.02em;
+            text-align: center;
+        ">Built With</h2>
+        <div style="
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        ">
+            <a href="https://ai.google.dev/" target="_blank" rel="noopener noreferrer" style="
+                background: white;
+                border: 1px solid #E2E8F0;
+                border-radius: 12px;
+                padding: 1rem 1.5rem;
+                text-align: center;
+                text-decoration: none;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+                min-width: 130px;
+            ">
+                <div style="font-size: 1.5rem; margin-bottom: 0.4rem;">🧠</div>
+                <p style="font-weight: 700; font-size: 0.88rem; color: #1E293B; margin: 0 0 0.15rem 0;">Google Gemini</p>
+                <p style="font-size: 0.75rem; color: #64748B; margin: 0;">AI Interviewer</p>
+            </a>
+            <a href="https://github.com/openai/whisper" target="_blank" rel="noopener noreferrer" style="
+                background: white;
+                border: 1px solid #E2E8F0;
+                border-radius: 12px;
+                padding: 1rem 1.5rem;
+                text-align: center;
+                text-decoration: none;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+                min-width: 130px;
+            ">
+                <div style="font-size: 1.5rem; margin-bottom: 0.4rem;">🎤</div>
+                <p style="font-weight: 700; font-size: 0.88rem; color: #1E293B; margin: 0 0 0.15rem 0;">OpenAI Whisper</p>
+                <p style="font-size: 0.75rem; color: #64748B; margin: 0;">Speech-to-Text</p>
+            </a>
+            <a href="https://elevenlabs.io/" target="_blank" rel="noopener noreferrer" style="
+                background: white;
+                border: 1px solid #E2E8F0;
+                border-radius: 12px;
+                padding: 1rem 1.5rem;
+                text-align: center;
+                text-decoration: none;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+                min-width: 130px;
+            ">
+                <div style="font-size: 1.5rem; margin-bottom: 0.4rem;">🔊</div>
+                <p style="font-weight: 700; font-size: 0.88rem; color: #1E293B; margin: 0 0 0.15rem 0;">ElevenLabs</p>
+                <p style="font-size: 0.75rem; color: #64748B; margin: 0;">Text-to-Speech</p>
+            </a>
+        </div>
+    </div>
+
     <!-- ═══════════ GITHUB / LINKS ═══════════ -->
     <div style="
         background: linear-gradient(135deg, #1E293B 0%, #334155 100%);
@@ -860,17 +965,45 @@ HOME_PAGE_HTML = """
             color: #94A3B8;
             font-size: 0.85rem;
             margin: 0 0 0.8rem 0;
-        ">Check out the source code and contribute on GitHub</p>
-        <span style="
-            display: inline-block;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.15);
-            color: #CBD5E1;
-            padding: 8px 20px;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        ">GitHub link coming soon</span>
+        ">Check out the source code and learn more about the project</p>
+        <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+            <a href="https://github.com/Nafisatibrahim/interview-preparation" target="_blank" style="
+                display: inline-block;
+                background: rgba(255,255,255,0.1);
+                border: 1px solid rgba(255,255,255,0.15);
+                color: #E2E8F0;
+                padding: 8px 20px;
+                border-radius: 10px;
+                font-size: 0.85rem;
+                font-weight: 500;
+                text-decoration: none;
+                transition: background 0.2s;
+            ">GitHub</a>
+            <a href="https://devpost.com/software/interview-preparation-coach" target="_blank" style="
+                display: inline-block;
+                background: rgba(255,255,255,0.1);
+                border: 1px solid rgba(255,255,255,0.15);
+                color: #E2E8F0;
+                padding: 8px 20px;
+                border-radius: 10px;
+                font-size: 0.85rem;
+                font-weight: 500;
+                text-decoration: none;
+                transition: background 0.2s;
+            ">Devpost</a>
+            <a href="https://interview-preparation-coach.streamlit.app/" target="_blank" style="
+                display: inline-block;
+                background: rgba(255,255,255,0.1);
+                border: 1px solid rgba(255,255,255,0.15);
+                color: #E2E8F0;
+                padding: 8px 20px;
+                border-radius: 10px;
+                font-size: 0.85rem;
+                font-weight: 500;
+                text-decoration: none;
+                transition: background 0.2s;
+            ">Live App</a>
+        </div>
     </div>
 
 </div>
