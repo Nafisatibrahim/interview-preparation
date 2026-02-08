@@ -1,6 +1,6 @@
 import streamlit as st
-from backend.models.gemini_model import interview_response
-from backend.models.gemini_model import interview_feedback
+from backend.models.gemini_model_old import interview_response
+from backend.models.gemini_model_old import interview_feedback
 
 from backend.pdf_reader import extract_text_from_pdf
 from backend.models.audio_tts import speak_text
