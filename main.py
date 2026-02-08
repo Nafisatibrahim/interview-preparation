@@ -66,7 +66,7 @@ from transformers import WhisperProcessor, WhisperForConditionalGeneration
 # Backend modules
 from backend.models.gemini_model import interview_response, interview_feedback
 from backend.pdf_reader import extract_text_from_pdf
-from backend.models.audio_tts import speak_text
+from backend.models.audio_tts_old import speak_text
 
 # Styling: CSS templates, HTML snippets, and home page content
 from styles import (

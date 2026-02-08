@@ -3,7 +3,7 @@ from backend.models.gemini_model_old import interview_response
 from backend.models.gemini_model_old import interview_feedback
 
 from backend.pdf_reader import extract_text_from_pdf
-from backend.models.audio_tts import speak_text
+from backend.models.audio_tts_old import speak_text
 
 
 import torch
