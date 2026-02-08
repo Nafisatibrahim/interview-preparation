@@ -1,5 +1,7 @@
 import streamlit as st
 from backend.models.gemini_model import interview_response
+from backend.models.gemini_model import interview_feedback
+
 from backend.pdf_reader import extract_text_from_pdf
 from backend.models.audio_tts import speak_text
 
@@ -81,14 +83,7 @@ if st.session_state.started and not flag:
             st.markdown(f"**You:** {turn['candidate']}")
 
    
-
-    # Audio input can be added here later
-    # audio = st.audio_input("Speak your answer")
-    # if audio:
-    #     user_answer = transcribe_audio(audio)
-    
-
-    # Load once (cache for performance)
+ 
     @st.cache_resource
 
     def load_whisper():
@@ -147,10 +142,10 @@ if st.session_state.started and not flag:
                     st.session_state.job_description,
                     st.session_state.resume_text,
                     st.session_state.conversation,
-                    transcription
+                    user_answer
                 )
                 audio_bytes = speak_text(next_response)
-                st.audio(audio_bytes, format="audio/mp3",start_time = "5s") 
+                st.audio(audio_bytes, format="audio/mp3") 
 
                 st.session_state.conversation.append({
                     "interviewer": next_response,
@@ -158,7 +153,6 @@ if st.session_state.started and not flag:
                 })
         else:
             if not transcription:
-                
                 st.warning("Please enter or speak an answer.")
             else:
                 st.session_state.conversation[-1]["candidate"] = transcription
@@ -170,7 +164,7 @@ if st.session_state.started and not flag:
                     transcription
                 )
                 audio_bytes = speak_text(next_response)
-                st.audio(audio_bytes, format="audio/mp3",start_time = "5s") 
+                st.audio(audio_bytes, format="audio/mp3") 
                 st.session_state.conversation.append({
                     "interviewer": next_response,
                     "candidate": ""
@@ -179,3 +173,12 @@ if st.session_state.started and not flag:
 st.sidebar.subheader("End the Interview and Get Feedback ")
 if st.sidebar.button("Stop Interview"):
     flag = True
+    next_response = interview_feedback(
+        st.session_state.job_description,
+        st.session_state.resume_text,
+        st.session_state.conversation,
+    )
+    print("da")
+    st.audio(audio_bytes, format="audio/mp3",start_time = "5s") 
+    st.subheader("Feedback")
+    st.write(next_response)

@@ -29,7 +29,8 @@ def load_prompt(prompt_name: str) -> str:
 
 # Load interviewer prompt
 INTERVIEWER_PROMPT = load_prompt("interviewer.txt")
-
+INTERVIEWER_FEEDBACK_PROMPT = load_prompt("evaluation.txt")
+print(INTERVIEWER_FEEDBACK_PROMPT)
 # Define Interview responses
 def interview_response(
     job_description: str,
@@ -68,4 +69,47 @@ Respond as the interviewer.
         model="gemini-2.5-flash",
         contents=full_prompt,
     )
+   
+
+   
     return response.text.strip()
+
+
+def interview_feedback(
+    job_description: str,
+    resume_text: str,
+    conversation_history: list,
+) -> str:
+    """
+    Generate the next interviewer response.
+    """
+
+    history_text = ""
+    for turn in conversation_history:
+        history_text += f"Interviewer: {turn['interviewer']}\n"
+        history_text += f"Candidate: {turn['candidate']}\n"
+    print(history_text)
+    full_prompt = f"""
+{INTERVIEWER_FEEDBACK_PROMPT}
+
+Job Description:
+{job_description}
+
+Candidate Resume:
+{resume_text}
+
+Conversation so far:
+{history_text}
+
+
+Provide professional interview feedback and evaluation of the candidate.
+Include strengths, weaknesses, and concrete improvement suggestions.
+"""
+    
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=full_prompt,
+    )
+    return response.text.strip()
+
+
