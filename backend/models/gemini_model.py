@@ -59,15 +59,20 @@ Conversation so far:
 Candidate just said:
 {user_input}
 
-Respond as {interviewer_name}, the interviewer.
+Respond as {interviewer_name}, the interviewer. Do not use markdown formatting like asterisks for bold or italics in your response.
 """
+
+    print(f"[DEBUG interview_response] user_input ({len(user_input)} chars): {user_input[:200]}")
+    print(f"[DEBUG interview_response] history turns: {len(conversation_history)}")
 
     response = _get_client().models.generate_content(
         model="gemini-2.5-flash",
         contents=full_prompt,
     )
 
-    return response.text.strip()
+    result = response.text.strip()
+    print(f"[DEBUG interview_response] Gemini response ({len(result)} chars): {result[:200]}")
+    return result
 
 
 def interview_feedback(

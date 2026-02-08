@@ -171,6 +171,21 @@ def render_pdf_as_images(pdf_bytes, max_pages=5):
         )
 
 
+def _md_to_html(text):
+    """
+    Converts basic markdown formatting to HTML for chat bubbles.
+    First escapes HTML, then converts **bold** and *italic* to tags.
+    """
+    import re
+    escaped = (text
+               .replace("&", "&amp;")
+               .replace("<", "&lt;")
+               .replace(">", "&gt;"))
+    escaped = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', escaped)
+    escaped = re.sub(r'\*(.+?)\*', r'<em>\1</em>', escaped)
+    return escaped
+
+
 def _escape_html(text):
     """Escapes HTML special characters to prevent XSS in chat bubbles."""
     return (text
@@ -199,7 +214,7 @@ def render_chat(conversation, interviewer_name):
         q_num += 1
 
         # ── Interviewer bubble (left-aligned, gray gradient) ──
-        interviewer_msg = _escape_html(turn['interviewer']).replace('\n', '<br>')
+        interviewer_msg = _md_to_html(turn['interviewer']).replace('\n', '<br>')
         bubbles_html += f"""
         <div class="chat-bubble chat-bubble-left">
             <div class="chat-meta">
@@ -263,6 +278,9 @@ def send_answer(answer_text):
         st.warning("No interview in progress.")
         return
 
+    print(f"[DEBUG send_answer] Candidate answer ({len(answer_text)} chars): {answer_text[:200]}")
+    print(f"[DEBUG send_answer] Conversation turns so far: {len(st.session_state.conversation)}")
+
     # Save the candidate's answer to the current (last) turn
     st.session_state.conversation[-1]["candidate"] = answer_text
 
@@ -279,8 +297,9 @@ def send_answer(answer_text):
     try:
         tts_bytes = speak_text(next_resp)
         st.session_state.last_tts_audio = tts_bytes
-    except Exception:
+    except Exception as tts_err:
         st.session_state.last_tts_audio = None
+        st.warning(f"Voice unavailable: {tts_err}")
 
     # Add a new turn for the next question (candidate answer is empty until they respond)
     st.session_state.conversation.append({
@@ -463,8 +482,9 @@ elif st.session_state.page == "interview":
                 try:
                     tts_bytes = speak_text(first_question)
                     st.session_state.last_tts_audio = tts_bytes
-                except Exception:
+                except Exception as tts_err:
                     st.session_state.last_tts_audio = None
+                    st.sidebar.warning(f"Voice unavailable: {tts_err}")
 
                 # Add the first turn to conversation history
                 st.session_state.conversation.append({
